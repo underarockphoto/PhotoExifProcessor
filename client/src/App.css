@@ -1,0 +1,102 @@
+.App-header {
+  height:120px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  border-bottom:1px solid rgb(110, 110, 110);
+}
+.App-logo{
+  height:90%;
+  width:auto;
+  object-fit: contain;
+}
+.projectControls{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content: space-between;
+}
+div.projectControls>div{
+  width:100%; 
+}
+#navMenu{
+  border-bottom:1px solid gray;
+  height:19px;
+  display:flex;
+  flex-direction:row;
+  justify-content: space-evenly;
+}
+div.subMenu{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  height:30px;
+  z-index:300;
+}
+.topButton{
+  border:none;
+  color:black;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: white;
+  display:flex;
+  font-size: small;
+}
+.topButton:hover{
+  border:none;
+  color:black;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width:100%;
+  text-align:left;
+  display:flex;
+
+}
+.subNav{
+  display:none;
+  border:none;
+  color:black;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:smaller;
+  background-color: rgb(219, 219, 219);
+  width:100%;
+  text-align:left;
+}
+.subMenu:hover .subNav{
+  display:flex;
+}
+.subNav:hover{
+  background-color: rgb(158, 158, 158);
+  font-weight:bold;
+}
+.subMenu:hover .topButton{
+  background-color:rgb(220, 220, 220);
+  border-bottom:1px solid gray;
+  font-weight:bold;
+}
+
+#imgDirectoryInputContainer{
+  height:40px;
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  border:1px solid rgb(128, 0, 111);
+  width:95%
+}
+div.label{
+  color:black;
+  width:220px;
+}
+input.textInput{
+  width:100%;
+  margin-right:20px;
+}
+#jsonOutputInputContainer{
+  height:40px;
+  border:1px solid rgb(0, 0, 0);
+  width:95%
+}
+
