@@ -9,18 +9,26 @@ function App() {
   const [files,setFiles] = useState([])
 const [filesExist,setFilesExist] = useState(false)
 const [pathReturned,setPathReturned] = useState("")
-  const getServer = async () =>{
+  const getServer = async (e) =>{
     if (serverStatus === "Healthy"){
-      const id = formatInput(photoDirectory)
-      timing = false;
-      console.log(id)
-      fetch(`http://localhost:4000/fileExists/${id}`)
-      .then(res=>res.json())
-      .then(res=>{
-        setPathReturned(res.path)
-        setFiles(res.files)
-        setFilesExist(res.exists.toString())
+
+      const requestObject = {id:{path:photoDirectory,tag:"Hello"}}
+      console.log(JSON.stringify(requestObject))
+      fetch(`http://localhost:4000/fileExists`,{
+        method: "POST",
+        headers:{ "Content-Type":"application/json"},
+        body: JSON.stringify(requestObject)
       })
+      .catch(error => {
+       console.log(error);
+        return;
+      });
+      // .then(res=>res.json())
+      // .then(res=>{
+      //   setPathReturned(res.path)
+      //   setFiles(res.files)
+      //   setFilesExist(res.exists.toString())
+      // })
     }else{
       console.log("Server unable to be reached.")
     }
