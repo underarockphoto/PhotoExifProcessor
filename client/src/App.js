@@ -3,14 +3,42 @@ import './App.css';
 import React,{useState} from "react"
 
 function App() {
-
+  let timing = true;
   const [photoDirectory,setPhotoDirectory] = useState("")
+  const formatInput = (input)=>{return '{"'+input+'"}'}
+  const [files,setFiles] = useState([])
+const [filesExist,setFilesExist] = useState(false)
+const [pathReturned,setPathReturned] = useState("")
   const getServer = async () =>{
-    const id = photoDirectory
-    fetch(`http://localhost:4000/pathExists/${photoDirectory}`)
-    .then(res=>res.json())
-    .then(res=>console.log(res))
+    if (serverStatus === "Healthy"){
+      const id = formatInput(photoDirectory)
+      timing = false;
+      console.log(id)
+      fetch(`http://localhost:4000/fileExists/${id}`)
+      .then(res=>res.json())
+      .then(res=>{
+        setPathReturned(res.path)
+        setFiles(res.files)
+        setFilesExist(res.exists.toString())
+      })
+    }else{
+      console.log("Server unable to be reached.")
+    }
+    
   }
+const [serverStatus,setServerStatus] = useState("Connecting...")
+  setInterval(()=>{
+    fetch('http://localhost:4000/')
+    .then(res=>res.json())
+    .then(res=>{
+      if(res.object && res.object==='Hello World!') setServerStatus("Healthy")
+      else setServerStatus ("Connecting")
+    })
+    .catch(err=>setServerStatus("Server error, see console."))
+  },5000)
+
+  const listOfFiles = files.map((file)=><div>{file}</div>)
+ 
   return (
     <div className="App">
       <header className="App-header">
@@ -40,7 +68,16 @@ function App() {
           </div>
           <div id="imgDirectoryInputContainer">
             <div className="label">Directory of Images: </div>
-            <input type='text' name="photoDirectory" onChange={(e)=>setPhotoDirectory(e.target.value)}/>
+            <input type='text' name="photoDirectory" onChange={(e)=>setPhotoDirectory(e.target.value)}
+          //   onKeyUp = {()=>{
+          //       clearTimeout(typingTimer)
+          //       timing = true;
+          //       typingTimer = setTimeout(()=>{if (timing) getServer()},doneTypingInterval)
+          //   }}
+          //   onKeyDown = {()=>{
+          //     clearTimeout(typingTimer)
+          // }}
+            />
             <button class="refresh" onClick={()=>getServer()}>Refresh</button>
           </div>
           <div id="jsonOutputInputContainer">
@@ -49,6 +86,11 @@ function App() {
         </div>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
+      <div>Server Status: {serverStatus}</div>
+      <div>Filepath: {pathReturned}</div>
+      <div>FilesExist: {filesExist}</div>
+      <div>Files:</div>
+      <div>{listOfFiles}</div>
     </div>
   );
 }

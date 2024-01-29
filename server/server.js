@@ -6,15 +6,33 @@ app.use(cors())
 const port = 4000
 const router = express.Router()
 const fs = require('fs')
-const {existsSync} = fs;
+const {existsSync,readdirSync} = fs;
 
 router.get('/', (req, res) => {
     res.send({object:'Hello World!'})
   })
-  router.get('/pathExists/:path', (req, res) => {
-    const path = req.params.path
+  router.get('/fileExists/*', (req, res) => {
+    
+    let path = req.params[0].replace('{"',"").replace('"}',"")
+    if (path.includes("../[x")){
+        const numUps = Number(path.split("x")[1].split("]")[0])
+        const restOfPath = path.split("x")[1].split("]")[1]
+        path=""
+        console.log(numUps)
+        for (let i=0;i<numUps;i++){
+            path = path+"../"
+            console.log(path)
+        }
+        path = path+restOfPath
+    }
     const exists = existsSync(path)
-    res.send({exists:exists})
+    let files = [];
+    if (exists){
+         files = readdirSync(path)
+    }else{
+        files = [];
+    }
+    res.send({path:path,exists:exists,files:files})
   })
 app.use(router)
 
