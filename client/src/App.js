@@ -3,47 +3,37 @@ import './App.css';
 import React,{useState} from "react"
 
 function App() {
-  let timing = true;
-  const [photoDirectory,setPhotoDirectory] = useState("")
-  const formatInput = (input)=>{return '{"'+input+'"}'}
-  const [files,setFiles] = useState([])
-const [filesExist,setFilesExist] = useState(false)
-const [pathReturned,setPathReturned] = useState("")
-  const getServer = async (e) =>{
-    if (serverStatus === "Healthy"){
 
-      const requestObject = {id:{path:photoDirectory,tag:"Hello"}}
-      console.log(JSON.stringify(requestObject))
-      fetch(`http://localhost:4000/fileExists`,{
+  const [photoDirectory,setPhotoDirectory] = useState("")
+
+  const [files,setFiles] = useState([])
+
+  const getServer = async (e) =>{
+
+
+      const requestObject = {path:photoDirectory}
+   
+      fetch(`http://localhost:4000/filesInPath`,{
         method: "POST",
         headers:{ "Content-Type":"application/json"},
         body: JSON.stringify(requestObject)
+      })
+      .then(res=>res.json())
+      .then(res=>{
+        console.log(res.files)
+
+        setFiles(res.files)
       })
       .catch(error => {
        console.log(error);
         return;
       });
-      // .then(res=>res.json())
-      // .then(res=>{
-      //   setPathReturned(res.path)
-      //   setFiles(res.files)
-      //   setFilesExist(res.exists.toString())
-      // })
-    }else{
-      console.log("Server unable to be reached.")
-    }
+
+
     
   }
-const [serverStatus,setServerStatus] = useState("Connecting...")
-  setInterval(()=>{
-    fetch('http://localhost:4000/')
-    .then(res=>res.json())
-    .then(res=>{
-      if(res.object && res.object==='Hello World!') setServerStatus("Healthy")
-      else setServerStatus ("Connecting")
-    })
-    .catch(err=>setServerStatus("Server error, see console."))
-  },5000)
+
+  
 
   const listOfFiles = files.map((file)=><div>{file}</div>)
  
@@ -94,9 +84,7 @@ const [serverStatus,setServerStatus] = useState("Connecting...")
         </div>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      <div>Server Status: {serverStatus}</div>
-      <div>Filepath: {pathReturned}</div>
-      <div>FilesExist: {filesExist}</div>
+      <div>Found {files.length} files.</div>
       <div>Files:</div>
       <div>{listOfFiles}</div>
     </div>
